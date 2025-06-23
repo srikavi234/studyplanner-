@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login - StudyBuddy</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: #222;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+  body.dark {
+    background-color: #121212;
+    color: #eee;
+  }
+  .login-container {
+    background: white;
+    padding: 40px 35px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    width: 320px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  body.dark .login-container {
+    background-color: #1e1e1e;
+    color: #ddd;
+    box-shadow: 0 4px 20px rgba(255,255,255,0.1);
+  }
+  h2 {
+    font-family: 'Georgia', serif;
+    margin-bottom: 25px;
+  }
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px 10px;
+    margin: 12px 0 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    box-sizing: border-box;
+  }
+  body.dark input[type="text"],
+  body.dark input[type="password"] {
+    background-color: #333;
+    border-color: #555;
+    color: #eee;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  .forgot-password {
+    display: block;
+    margin: 15px 0;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9em;
+  }
+  .forgot-password:hover {
+    text-decoration: underline;
+  }
+  /* Dark mode toggle button top right */
+  #themeToggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    cursor: pointer;
+    color: #007bff;
+    transition: color 0.3s;
+  }
+  body.dark #themeToggle {
+    color: #eee;
+  }
+  
+</style>
+</head>
+<body>
+<button id="themeToggle">🌙</button>
+
+<div class="login-container">
+  <h2>Study Planner Login</h2>
+  <form id="loginForm">
+    <input type="text" id="username" placeholder="Username" required autocomplete="off" />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit">Login</button>
+  </form>
+  <a href="#" class="forgot-password" id="forgotPassword">Forgot Password?</a>
+</div>
+ 
+
+<script>
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.onclick = () => {
+    document.body.classList.toggle('dark');
+    themeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  };
+
+  const loginForm = document.getElementById('loginForm');
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    if (!username || !password) {
+      alert('Please enter username and password.');
+      return;
+    }
+    // Save login data to localStorage (demo purpose only)
+    localStorage.setItem('studyPlannerUser', JSON.stringify({ username }));
+    alert(`Welcome, ${username}! Login successful.`);
+    loginForm.reset();
+  });
+
+  // Forget password link action (demo alert)
+  document.getElementById('forgotPassword').addEventListener('click', e => {
+    e.preventDefault();
+    alert('Password reset instructions sent to your email (demo).');
+  });
+</script>
+</body>
+</html>

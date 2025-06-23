@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Planner -StudyBuddy</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0; padding: 0;
+    color: #222;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  body.dark {
+    background-color: #121212;
+    color: #eee;
+  }
+  nav ul {
+    list-style: none;
+    margin: 0; padding: 10px 20px;
+    display: flex;
+    background-color:#3a3b3c;
+    align-items: center;
+    justify-content: space-between;
+  }
+  nav ul li a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: 600;
+  }
+  #themeToggle {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: white;
+  }
+  .planner-container {
+    
+    max-width: 900px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  body.dark .planner-container {
+    background-color: #1e1e1e;
+    color: #ddd;
+    box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  }
+  h2 {
+    font-family: 'Georgia', serif;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  .add-task {
+    display: flex;
+    margin-bottom: 25px;
+    gap: 10px;
+  }
+  .add-task input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    font-size: 1.1em;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  .add-task button {
+    padding: 10px 20px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .add-task button:hover {
+    background-color: #0056b3;
+  }
+  .add-task select {
+  padding: 10px;
+  font-size: 1.1em;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+  .weekdays {
+    display: grid;
+    grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+  }
+  .day-column {
+    background-color: #f9fafb;
+    border-radius: 8px;
+    padding: 15px;
+    min-height: 250px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+  body.dark .day-column {
+    background-color: #2a2a2a;
+  }
+  .day-column h3 {
+    margin-top: 0;
+    text-align: center;
+    font-weight: 700;
+    font-family: 'Georgia', serif;
+  }
+  ul.task-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 10px 0 0 0;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+  ul.task-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #e9ecef;
+    margin-bottom: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 0.95em;
+  }
+  body.dark ul.task-list li {
+    background-color: #3a3a3a;
+  }
+  ul.task-list li.completed span.task-text {
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+  ul.task-list li span.task-text {
+    flex-grow: 1;
+    margin-left: 8px;
+  }
+  ul.task-list li button.delete-btn {
+    background: #dc3545;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 2px 6px;
+    font-size: 0.85em;
+  }
+  ul.task-list li button.delete-btn:hover {
+    background: #b52a37;
+  }
+  .export-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+  .export-buttons button {
+    padding: 10px 25px;
+    font-size: 1em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    background-color: #28a745;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  .export-buttons button:hover {
+    background-color: #1e7e34;
+  }
+  .export-buttons button#exportPdf {
+    background-color: #6f42c1;
+  }
+  .export-buttons button#exportPdf:hover {
+    background-color: #4b2a8d;
+  }
+  .bottom{
+      text-align: center;
+      background-color: #3a3b3c;
+      color: #eee;
+      
+    
+     }
+</style>
+</head>
+<body>
+<nav>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    
+    <li><a href="planner.html">Planner</a></li>
+    <li><a href="login.html">Login</a></li>
+    <li><a href="review.html">Review</a></li>
+    <li><button id="themeToggle">🌙</button></li>
+  </ul>
+</nav>
+
+<div class="planner-container">
+  <h2>Weekly Study Planner</h2>
+
+ <div class="add-task">
+  <select id="daySelect">
+    <option value="Monday">Monday</option>
+    <option value="Tuesday">Tuesday</option>
+    <option value="Wednesday">Wednesday</option>
+    <option value="Thursday">Thursday</option>
+    <option value="Friday">Friday</option>
+    <option value="Saturday">Saturday</option>
+    <option value="Sunday">Sunday</option>
+  </select>
+  <input type="text" id="taskInput" placeholder="Enter new task..." />
+  <button id="addTaskBtn">Add Task</button>
+</div>
+
+  <div class="weekdays" id="weekdaysContainer">
+    <!-- Day columns will be generated here by JS -->
+  </div>
+
+  <div class="export-buttons">
+    <button id="exportCsv">Export as CSV</button>
+    <button id="exportPdf">Export as PDF</button>
+  </div>
+</div>
+ <section class="bottom">
+    <p>StudyBuddy@2025<p>
+      <p>“Planning is the first step to success.”
+
+</p>
+  </section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const weekdaysContainer = document.getElementById('weekdaysContainer');
+  const taskInput = document.getElementById('taskInput');
+  const addTaskBtn = document.getElementById('addTaskBtn');
+
+  let tasks = JSON.parse(localStorage.getItem('weeklyTasks')) || {
+    Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: []
+  };
+
+  // Render the columns and tasks
+  function renderTasks() {
+    weekdaysContainer.innerHTML = '';
+    days.forEach(day => {
+      const col = document.createElement('div');
+      col.className = 'day-column';
+      col.innerHTML = `<h3>${day}</h3><ul class="task-list" data-day="${day}"></ul>`;
+      weekdaysContainer.appendChild(col);
+
+      const ul = col.querySelector('ul');
+      tasks[day].forEach((task, index) => {
+        const li = document.createElement('li');
+        li.className = task.completed ? 'completed' : '';
+        li.innerHTML = `
+          <input type="checkbox" ${task.completed ? 'checked' : ''} data-day="${day}" data-index="${index}" />
+          <span class="task-text">${task.text}</span>
+          <button class="delete-btn" data-day="${day}" data-index="${index}">Delete</button>
+        `;
+        ul.appendChild(li);
+      });
+    });
+  }
+
+  addTaskBtn.addEventListener('click', () => {
+  const text = taskInput.value.trim();
+  const selectedDay = document.getElementById('daySelect').value;
+  if (!text) return alert('Please enter a task.');
+  tasks[selectedDay].push({ text, completed: false });
+  saveTasks();
+  taskInput.value = '';
+  renderTasks();
+});
+
+
+  // Save tasks 
+  function saveTasks() {
+    localStorage.setItem('weeklyTasks', JSON.stringify(tasks));
+  }
+
+  // Toggle task complete or delete task 
+  weekdaysContainer.addEventListener('click', e => {
+    if (e.target.matches('input[type="checkbox"]')) {
+      const day = e.target.dataset.day;
+      const index = e.target.dataset.index;
+      tasks[day][index].completed = e.target.checked;
+      saveTasks();
+      renderTasks();
+    }
+    if (e.target.matches('button.delete-btn')) {
+      const day = e.target.dataset.day;
+      const index = e.target.dataset.index;
+      tasks[day].splice(index, 1);
+      saveTasks();
+      renderTasks();
+    }
+  });
+
+  // Export as CSV
+  document.getElementById('exportCsv').addEventListener('click', () => {
+    let csv = 'Day,Task,Completed\n';
+    days.forEach(day => {
+      tasks[day].forEach(task => {
+        csv += `"${day}","${task.text}","${task.completed ? 'Yes' : 'No'}"\n`;
+      });
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'study_tasks.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Export tasks as PDF 
+  document.getElementById('exportPdf').addEventListener('click', () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    let y = 10;
+    doc.setFontSize(16);
+    doc.text('Weekly Study Planner Tasks', 10, y);
+    y += 10;
+    doc.setFontSize(12);
+    days.forEach(day => {
+      doc.text(day + ':', 10, y);
+      y += 7;
+      if (tasks[day].length === 0) {
+        doc.text('  No tasks', 15, y);
+        y += 7;
+      } else {
+        tasks[day].forEach(task => {
+          const line = `  - [${task.completed ? 'X' : ' '}] ${task.text}`;
+          doc.text(line, 15, y);
+          y += 7;
+          if (y > 280) { // new page
+            doc.addPage();
+            y = 10;
+          }
+        });
+      }
+      y += 5;
+    });
+    doc.save('study_tasks.pdf');
+  });
+
+  // Theme toggle button
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.onclick = () => {
+    document.body.classList.toggle('dark');
+    themeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  };
+
+  // Initial render
+  renderTasks();
+</script>
+</body>
+</html>
